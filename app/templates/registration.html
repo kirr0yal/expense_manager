@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Регистрация</h1>
+<form action="" method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="email" class="form-label">Email address</label>
+      <input name="email" type="email" class="form-control" id="email" placeholder="name@example.com" required>
+    </div>
+    <div class="mb-3">
+      <label for="username" class="form-label">Username</label>
+      <input name="username" type="text" class="form-control" id="username" placeholder="username" required>
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input name="password" type="password" class="form-control" id="password" placeholder="password" required>
+    </div>
+    <div class="mb-3">
+      <label for="password2" class="form-label">Confirm password</label>
+      <input name="password2" type="password" class="form-control" id="password2" placeholder="confirm password" required>
+    </div>
+    {% if message %}
+    <div class="alert alert-danger" role="alert">
+      {{ message }}
+    </div>
+    {% endif %}
+    <input type="submit" value="Зарегистрироваться">
+</form>
+{% endblock %}

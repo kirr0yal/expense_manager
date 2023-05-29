@@ -1,0 +1,55 @@
+    <nav>
+      <ul class="pagination">
+        <li class="page-item {% if not has_previous %}disabled{% endif %}">
+            <button class="page-link" onclick="load_page({{ previous_page }})">Назад</button></li>
+        {% for page in pages %}
+            <li class="page-item {% if page == current_page %}active{% endif %}">
+                <button class="page-link" onclick="load_page({{ page }})">{{ page }}</button>
+            </li>
+        {% endfor %}
+        <li class="page-item {% if not has_next %}disabled{% endif %}">
+            <button class="page-link" onclick="load_page({{ next_page }})">Вперед</button></li>
+      </ul>
+    </nav>
+<p class="text-danger">{{ message }}</p>
+<table class="table table-hover">
+<thead>
+    <tr>
+        <th>id</th>
+        <th>Дата</th>
+        <th>Описание</th>
+        <th>Сумма</th>
+        <th>Операции</th>
+    </tr>
+</thead>
+<tbody>
+{% for transaction in transactions %}
+    <tr>
+        <td>{{ transaction.id }}</td>
+        <td>{{ transaction.created }}</td>
+        <td>{{ transaction.description }}
+            {% if transaction.evidence %}
+                <a href="{{ transaction.evidence.url }}" download>{{ transaction.filename }}</a>
+            {% endif %}
+        </td>
+        <td style="color: {% if transaction.amount < 0 %}red{% else %}darkgreen{% endif %}">
+            {{ transaction.amount }} KZT
+        </td>
+        <td>
+            <button class="btn btn-sm btn-danger" onclick="delete_transaction({{ transaction.id }})">удалить</button>
+            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal_edit_{{ transaction.id }}">ред</button>
+        </td>
+    </tr>
+{% endfor %}
+    <tr>
+        <td></td>
+        <td colspan="2">Среднее</td>
+        <td colspan="2">{{ avg }}</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td colspan="2">Итого</td>
+        <td colspan="2">{{ total }}</td>
+    </tr>
+</tbody>
+</table>

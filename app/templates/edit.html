@@ -1,0 +1,44 @@
+<!-- Modal -->
+<div class="modal fade" id="modal_edit_{{ transaction.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Редактировать запись</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form action="/edit/{{ transaction.id }}" enctype="multipart/form-data" method="POST" style="max-width: 800px">
+          <div class="modal-body">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="description" class="form-label">Описание</label>
+                <input name="description" value="{{ transaction.description }}" type="text" class="form-control" id="description" required>
+            </div>
+            <div class="mb-3">
+                <label for="amount" class="form-label">Сумма</label>
+                <input name="amount" value="{{ transaction.amount_abs }}" type="number" class="form-control" id="amount">
+            </div>
+
+            <div class="mb-3">
+                <label for="evidence" class="form-label">Файл</label>
+                <input name="evidence" type="file" class="form-control" id="evidence">
+                {% if transaction.evidence %}
+                    <a href="{{ transaction.evidence.url }}" target="_blank">{{ transaction.filename }}</a>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label for="type">Тип</label>
+                <select name="type" id="type" class="form-control">
+                    <option value="expense" {% if transaction.amount < 0 %} selected {% endif %}>Расход</option>
+                    <option value="income" {% if transaction.amount > 0 %} selected {% endif %}>Доход</option>
+                </select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>

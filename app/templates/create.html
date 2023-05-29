@@ -1,0 +1,41 @@
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Добавить запись</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form action="/create/" enctype="multipart/form-data" method="POST" style="max-width: 800px">
+          <div class="modal-body">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="description" class="form-label">Описание</label>
+                <input name="description" type="text" class="form-control" id="description" required>
+            </div>
+            <div class="mb-3">
+                <label for="amount" class="form-label">Сумма</label>
+                <input name="amount" type="number" class="form-control" id="amount">
+            </div>
+
+            <div class="mb-3">
+                <label for="evidence" class="form-label">Файл</label>
+                <input name="evidence" type="file" class="form-control" id="evidence">
+            </div>
+          
+            <div class="mb-3">
+                <label for="type">Тип</label>
+                <select name="type" id="type" class="form-control">
+                    <option value="expense" {% if transaction_type == 'expenses' %} selected {% endif %}>Расход</option>
+                    <option value="income" {% if transaction_type == 'incomes' %} selected {% endif %}>Доход</option>
+                </select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>

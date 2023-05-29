@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block content %}
+    <p>Добро пожаловать, {{ user.first_name }}! Ваш email: {{ user.username }} (<a href="/logout">Выйти</a>)</p>
+
+    <ul class="nav nav-tabs">
+        <li class="new_item">
+            <a href="/account/?search={{ search }}" class="nav-link {% if transaction_type == "" %}active{% endif %}"
+               aria-current="page">All</a>
+        </li>
+        <li class="new_item">
+            <a href="/account/incomes?search={{ search }}" class="nav-link {% if transaction_type == "incomes" %}active{% endif %}">
+                Incomes</a>
+        </li>
+        <li class="new_item">
+            <a href="/account/expenses?search={{ search }}" class="nav-link {% if transaction_type == "expenses" %}active{% endif %}">
+                Expenses</a>
+        </li>
+    </ul>
+
+
+    <form method="get">
+        <div class="mb-3">
+              <input name="search" type="text" onchange="load_page(page_no)" onkeyup="load_page(page_no)"
+             class="form-control" id="search" placeholder="Поиск..."
+             value="{{ search }}"
+             autofocus
+                >
+        </div>
+    </form>
+
+    <div id="ajax"> </div>
+
+<!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Добавить
+    </button>
+
+  <a href="/add10" class="btn btn-primary btn-danger" style="margin-left: 100px">Добавить 10 транзакций</a>
+
+    <script>
+        const delete_transaction = (transaction_id) => {
+            const result = confirm("Удалить транзакцию номер " + transaction_id);
+            if (result) {
+                const url = "/delete/" + transaction_id;
+                window.location = url;
+            }
+        }
+
+        const load_page = async (page) => {
+            page_no = page;
+            const search = document.getElementById("search").value;
+            const url = `/account/{{ transaction_type }}?search=${search}&page=${page}&ajax=1`;
+            const response = fetch(url);
+            const text = await (await response).text();
+            const status = await (await response).status;
+            if (status !== 200) {
+                document.getElementById("ajax").innerHTML = "Ошибка";
+                return;
+            }
+            document.getElementById("ajax").innerHTML = text;
+        }
+        let page_no = {{ current_page }};
+        load_page(page_no);
+
+    </script>
+
+{% include "create.html" %}
+
+{% for transaction in transactions %}
+    {% include "edit.html" %}
+
+{% endfor %}
+
+
+{% endblock %}
